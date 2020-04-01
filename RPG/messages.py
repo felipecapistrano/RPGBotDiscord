@@ -2,13 +2,39 @@ class Message:
     def __init__(self):
         pass
 
+    def character_template(self):
+        return """
+        ```
+        {
+            "Nome": "",
+            "Imagem": "",
+            "Stats": {
+                "Forca": 0,
+                "Destreza": 0,
+                "Agilidade": 0,
+                "Carisma": 0,
+                "Conhecimento": 0,
+                "Percepcao": 0,
+                "Furtividade": 0,
+                "Mira": 0,
+                "Habilidade": 0,
+                "Esquiva": 0,
+                "Bloqueio": 0,
+                "Discernimento": 0
+            },
+            "Elementos": [],
+            "Inventario": []
+        }
+        ```
+        """
+
     def invalid(self):
         return "Comando inválido"
 
     def rolling_without_number(self):
         return "Por favor insira um número para rodar"
 
-    def roll(self, author, result, bonus = None, advantage = None):
+    def dice(self, author, result, bonus = None, advantage = None):
         if bonus is None:
             if advantage is None:
                 return "{}, seu resultado foi **{}**".format(author, result)
