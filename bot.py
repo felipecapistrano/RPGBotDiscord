@@ -19,8 +19,7 @@ async def on_message(message):
         return
 
     if message.content.startswith('$d'):
-        msg = controller.dice(message)
-        await message.channel.send(msg)
+        await message.channel.send(controller.dice(message))
         
     if message.content.startswith('$criar'):
         await message.channel.send(controller.character_template())
@@ -28,6 +27,9 @@ async def on_message(message):
             return m.author == message.author and m.channel == message.channel
 
         msg = await client.wait_for('message', check=check)
-        controller.create(msg.content)
+        await message.channel.send(controller.create(msg.content, str(message.author.id)))
 
+    if message.content.startswith('$usar'):
+        await message.channel.send(controller.use(message))
+        
 client.run(info["token"])

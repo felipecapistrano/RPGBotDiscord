@@ -6,41 +6,39 @@ messages = Message()
 
 class Controller:
     def __init__(self):
-        pass
+        self.in_use = {}
 
     #Converter pra dicionário no futuro
     def dice(self, message):
-        if message.content == '$d':
-            return messages.rolling_without_number()
-        msg = message.content.replace("$d", "").split(" ")
-        for value in range(len(msg)):
-            try:
-                msg[value] = int(msg[value])
-            except:
-                pass
-
-        if len(msg) == 1:
-            result = actions.dice(msg[0])
-            return messages.dice(message.author, result)
-
-        elif len(msg) == 2:
-            if isinstance(msg[1], int):
-                result = actions.dice(msg[0])
-                return messages.dice(message.author, result, msg[1])
-            else:
-                result = actions.dice(msg[0], advantage=msg[1])
-                return messages.dice(message.author, result, advantage=1)
-
-        elif len(msg) == 3:
-            try:
-                result = actions.dice(msg[0], advantage=msg[2])
-                return messages.dice(message.author, result, msg[1], advantage=1)
-            except:
-                return messages.invalid()
+        text = actions.dice(message)
+        if text["text"] == "No number":
+            msg = messages.rolling_without_number()
+        elif text["text"] == "Dice1":
+            msg = messages.dice(text["author"], text["result"])
+        elif text["text"] == "Dice2":
+            msg = messages.dice(text["author"], text["result"], text["bonus"]) 
+        elif text["text"] == "Dice3":
+            msg = messages.dice(text["author"], text["result"], advantage=1)
+        elif text["text"] == "Dice4":
+            msg = messages.dice(text["author"], text["result"], text["bonus"], advantage=1)
+        else:
+            msg = messages.invalid()
+        return msg
+        
+    def use(self, message):
+        msg = message.content.split(" ")
+        return msg
 
     def character_template(self):
-        character = messages.character_template()
-        return character
+        msg = messages.character_template()
+        return msg
 
-    def create(self, character):
-        actions.create_character(character)
+    def create(self, character, author):
+        try:
+            actions.create_character(character, author)
+            msg = messages.create_sucess()
+            return msg
+            
+        except:
+            msg = messages.create_failed()
+            return msg
