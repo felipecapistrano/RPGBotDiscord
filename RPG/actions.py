@@ -3,12 +3,12 @@ import json
 
 class Actions:
     def __init__(self):
-        self.db = {}
-        self.get_db()
+        self.db = self.get_db()
 
     def get_db(self):
         with open('characters.json') as db:
             self.db = json.load(db)
+            return self.db
 
     def save_db(self):
         with open('characters.json', 'w') as db:
@@ -21,6 +21,14 @@ class Actions:
         if character["Nome"] not in self.db[author]:
             self.db[author][character["Nome"]] = character
             self.save_db()
+
+    def embed(self, name, author, discord):
+        character = self.db[author][name]
+        embed = discord.Embed(title=character["Nome"], color=0x00ff00)
+        embed.set_image(url=character["Imagem"])
+        for stat in character["Stats"]:
+            embed.add_field(name=stat, value=character["Stats"][stat], inline=True)
+        return embed
 
     def dice(self, message):
         if message.content == '$d':
@@ -46,13 +54,8 @@ class Actions:
                 return {"text": "Dice3", "author": message.author, "result": result}
                 
         elif len(msg) == 3:
-            try:
-                result = self.roll_dice(msg[0], advantage=msg[2])
-                return {"text": "Dice4", "author": message.author, "result": result, "bonus": msg[1]}
-                
-            except:
-                return {"text": "Invalid"}
-
+            result = self.roll_dice(msg[0], advantage=msg[2])
+            return {"text": "Dice4", "author": message.author, "result": result, "bonus": msg[1]}
 
     def roll_dice(self, dice, advantage = None):
         if advantage == None:

@@ -29,7 +29,17 @@ async def on_message(message):
         msg = await client.wait_for('message', check=check)
         await message.channel.send(controller.create(msg.content, str(message.author.id)))
 
-    if message.content.startswith('$usar'):
-        await message.channel.send(controller.use(message))
-        
+    if message.content.startswith('$selecionar'):
+        await message.channel.send(controller.select(message))
+    
+    if message.content.startswith('$rolar'):
+        await message.channel.send(controller.roll(message))
+    
+    if message.content.startswith('$ficha'):
+        embed = controller.embed(message, discord)
+        try:
+            await message.channel.send(embed=embed)
+        except:
+            await message.channel.send(embed)
+
 client.run(info["token"])
