@@ -41,7 +41,6 @@ class Controller:
             if not actions.check_character(character):
                 return messages.incorrect_character()
             actions.create_character(character, author)
-            self.in_use[author] = character["Nome"]
             return messages.create_sucess()
               
         except:
