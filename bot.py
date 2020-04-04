@@ -18,8 +18,32 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    if message.content.startswith('$adicionar'):
-        await message.channel.send(controller.add_item(message))
+    if message.content.startswith('$adicionar_item'):
+        await message.channel.send(controller.add(message))
+        embed = controller.embed(message, discord)
+        try:
+            await message.channel.send(embed=embed)
+        except:
+            await message.channel.send(embed)
+
+    if message.content.startswith('$adicionar_elemento'):
+        await message.channel.send(controller.add(message))
+        embed = controller.embed(message, discord)
+        try:
+            await message.channel.send(embed=embed)
+        except:
+            await message.channel.send(embed)
+
+    if message.content.startswith('$adicionar_maestria'):
+        await message.channel.send(controller.add(message))
+        embed = controller.embed(message, discord)
+        try:
+            await message.channel.send(embed=embed)
+        except:
+            await message.channel.send(embed)
+
+    if message.content.startswith('$adicionar_tecnica'):
+        await message.channel.send(controller.add(message))
         embed = controller.embed(message, discord)
         try:
             await message.channel.send(embed=embed)
@@ -53,7 +77,7 @@ async def on_message(message):
     if message.content.startswith('$rolar'):
         await message.channel.send(controller.roll(message))
 
-    if message.content.startswith('$remover'):
+    if message.content.startswith('$remover_item'):
         await message.channel.send(controller.remove_item(message))
         embed = controller.embed(message, discord)
         try:

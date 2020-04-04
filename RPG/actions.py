@@ -40,16 +40,40 @@ class Actions:
         character = self.db[author][name]
         inventory = "Nenhum item adicionado"
         stats = ""
+        footer = ""
         if character["Inventario"] != []:
             inventory = ""
             for item in character["Inventario"]:
                 inventory += "- {}\n".format(item)
         for key, value in character["Stats"].items():
             stats += "- {}: {}\n".format(key, value)
+        if character["Maestrias"] != []:
+            footer += "Maestrias: "
+            for maestria in character["Maestrias"]:
+                footer += "{}, ".format(maestria)
+            footer = footer[:-2]
+        if character["Elementos"] != []:
+            if footer != "":
+                footer += "\nElementos: "
+            else:
+                footer += "Elementos: "
+            for elemento in character["Elementos"]:
+                footer += "{}, ".format(elemento)
+            footer = footer[:-2]
+        if character["Tecnicas"] != []:
+            if footer != "":
+                footer += "\nTecnicas: "
+            else:
+                footer += "Tecnicas: "
+            for tecnica in character["Tecnicas"]:
+                footer += "{}, ".format(tecnica)
+            footer = footer[:-2]
         embed = discord.Embed(title=character["Nome"], color=0x00ff00)
         embed.set_image(url=character["Imagem"])
         embed.add_field(name="STATS", value=stats, inline=True)
         embed.add_field(name="ITENS", value=inventory, inline=True)
+        if footer != "":
+            embed.set_footer(text=footer)
         return embed
 
     def dice(self, message):

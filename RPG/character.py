@@ -15,7 +15,10 @@ class Character:
         self.discernimento = character["Stats"]["Discernimento"]
         self.poder = character["Stats"]["Poder"]
         self.inventario = character["Inventario"]
-    
+        self.maestrias = character["Maestrias"]
+        self.elementos = character["Elementos"]
+        self.tecnicas = character["Tecnicas"]
+
     def export(self):
         return {
         "Nome": self.nome,
@@ -34,17 +37,38 @@ class Character:
             "Discernimento": self.discernimento,
             "Poder": self.poder
         },
-        "Inventario": self.inventario
+        "Inventario": sorted(self.inventario),
+        "Maestrias": sorted(self.maestrias),
+        "Elementos": sorted(self.elementos),
+        "Tecnicas": sorted(self.tecnicas)
             }
 
     def change_image(self, img):
         self.imagem = img
         
-    def add_inventory(self, item):
+    def add_item(self, item):
         self.inventario.append(item)
 
-    def remove_inventory(self, item):
+    def remove_item(self, item):
         self.inventario.remove(item)
+
+    def add_mastery(self, mastery):
+        self.maestrias.append(mastery)
+
+    def remove_mastery(self, mastery):
+        self.inventario.remove(mastery)
+
+    def add_element(self, element):
+        self.elementos.append(element)
+
+    def remove_element(self, element):
+        self.inventario.remove(element)
+
+    def add_technique(self, technique):
+        self.tecnicas.append(technique)
+
+    def remove_technique(self, technique):
+        self.tecnicas.remove(technique)
 
     def get_name(self):
         return self.nome

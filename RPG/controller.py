@@ -8,6 +8,34 @@ messages = Message()
 class Controller:
     def __init__(self):
         self.in_use = {}
+        
+    def add(self, message):
+        try:
+            msg = message.content.split(" ")
+            operation = msg[0]
+            to_add = msg[1]
+            author = str(message.author.id)
+            if self.check_selected(author) == False:
+                return messages.not_selected()
+            character = self.get_character(author)
+
+            if operation == "$adicionar_item":
+                character.add_item(to_add)
+
+            elif operation == "$adicionar_maestria":
+                character.add_mastery(to_add)
+
+            elif operation == "$adicionar_elemento":
+                character.add_element(to_add)
+
+            else:
+                character.add_technique(to_add)
+
+            character = character.export()
+            actions.update_character(character, author)
+            return messages.alteration_sucess()
+        except:
+            return messages.alteration_failed()
 
     def commands(self):
         return messages.commands()
@@ -19,13 +47,14 @@ class Controller:
             author = str(message.author.id)
             if self.check_selected(author) == False:
                 return messages.not_selected()
+
             character = self.get_character(author)
             character.change_image(url)
             character = character.export()
             actions.update_character(character, author)
-            return messages.image_sucess()
+            return messages.alteration_sucess()
         except:
-            return messages.image_failed()
+            return messages.alteration_failed()
 
     def character_template(self):
         msg = messages.character_template()
@@ -40,6 +69,7 @@ class Controller:
         try:
             if not actions.check_character(character):
                 return messages.incorrect_character()
+
             actions.create_character(character, author)
             return messages.create_sucess()
               
@@ -50,16 +80,22 @@ class Controller:
         text = actions.dice(message)
         if text["text"] == "No number":
             msg = messages.rolling_without_number()
+
         elif text["text"] == "Dice1":
             msg = messages.dice(text["author"], text["result"])
+
         elif text["text"] == "Dice2":
             msg = messages.dice(text["author"], text["result"], text["bonus"]) 
+
         elif text["text"] == "Dice3":
             msg = messages.dice(text["author"], text["result"], advantage=1)
+
         elif text["text"] == "Dice4":
             msg = messages.dice(text["author"], text["result"], text["bonus"], advantage=1)
+
         else:
             msg = messages.invalid()
+
         return msg
 
     def embed(self, message, discord):
@@ -75,32 +111,6 @@ class Controller:
         character_json = db[author][name]
         return Character(character_json)
 
-    def select(self, message):
-        msg = message.content.split(" ")
-        name = msg[1]
-        db = actions.get_db()
-        author = str(message.author.id)
-        if name in db[author]:
-            self.in_use[author] = name
-            return messages.select_sucess(name)
-        else:
-            return messages.select_failed()
-        
-    def add_item(self, message):
-        try:
-            msg = message.content.split(" ")
-            item = msg[1]
-            author = str(message.author.id)
-            if self.check_selected(author) == False:
-                return messages.not_selected()
-            character = self.get_character(author)
-            character.add_inventory(item)
-            character = character.export()
-            actions.update_character(character, author)
-            return messages.inventory_sucess()
-        except:
-            return messages.inventory_failed()
-
     def remove_item(self, message):
         try:
             msg = message.content.split(" ")
@@ -112,9 +122,9 @@ class Controller:
             character.remove_inventory(item)
             character = character.export()
             actions.update_character(character, author)
-            return messages.inventory_sucess()
+            return messages.alteration_sucess()
         except:
-            return messages.inventory_failed()
+            return messages.alteration_failed()
 
     def roll(self, message):
         msg = message.content.split(" ")
@@ -184,6 +194,17 @@ class Controller:
             result = actions.roll_dice(10, advantage)
             return messages.dice(character.get_name(), result, bonus, advantage)
 
+    def select(self, message):
+        msg = message.content.split(" ")
+        name = msg[1]
+        db = actions.get_db()
+        author = str(message.author.id)
+        if name in db[author]:
+            self.in_use[author] = name
+            return messages.select_sucess(name)
+        else:
+            return messages.select_failed()
+
     def up_stat(self, message):
         try:
             msg = message.content.split(" ")
@@ -230,6 +251,6 @@ class Controller:
 
             character = character.export()
             actions.update_character(character, author)
-            return messages.up_sucess()
+            return messages.alteration_sucess()
         except:
-            return messages.up_failed()
+            return messages.alteration_failed()

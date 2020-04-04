@@ -23,7 +23,10 @@ Por favor preencha as informações a seguir sem quebrar a formatação <3
         "Discernimento": 0,
         "Poder": 0
     },
-    "Inventario": []
+    "Inventario": [],
+    "Maestrias": [],
+    "Elementos": [],
+    "Tecnicas": []
 }
 ```
 """
@@ -63,23 +66,14 @@ $upar: melhora um stat do personagem
             else:
                 return "{}, seus resultados foram {} / {}\n{} {} {} = **{}**".format(author, result[0], result[1], result[0], operand, abs(bonus), result[0] + bonus)
 
+    def alteration_sucess(self):
+        return "A alteração foi realizada com sucesso"
+
+    def alteration_failed(self):
+        return "Não foi possível realizar a alteração"
+
     def incorrect_character(self):
         return "O personagem não foi criado com o formato correto"
-
-    def invalid(self):
-        return "Comando inválido"
-
-    def image_sucess(self):
-        return "A imagem foi atualizada com sucesso"
-
-    def image_failed(self):
-        return "Não foi possível alterar a imagem"
-
-    def inventory_failed(self):
-        return "Não foi possível alterar o inventário"
-
-    def inventory_sucess(self):
-        return "Inventário alterado com sucesso"
 
     def not_selected(self):
         return "O personagem não foi selecionado ou não existe"
@@ -95,9 +89,3 @@ $upar: melhora um stat do personagem
 
     def select_sucess(self, name):
         return "Você selecionou o(a) personagem {}".format(name)
-
-    def up_failed(self):
-        return "Houve um erro ao upar o stat"
-
-    def up_sucess(self):
-        return "O stat foi upado com sucesso"
