@@ -6,12 +6,12 @@ class Actions:
         self.db = self.get_db()
 
     def get_db(self):
-        with open('characters.json') as db:
+        with open('RPG/characters.json') as db:
             self.db = json.load(db)
             return self.db
 
     def save_db(self):
-        with open('characters.json', 'w') as db:
+        with open('RPG/characters.json', 'w') as db:
             json.dump(self.db, db, ensure_ascii=False, indent=2)
 
     def create_character(self, character, author):
