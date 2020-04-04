@@ -22,12 +22,34 @@ class Actions:
             self.db[author][character["Nome"]] = character
             self.save_db()
 
+    def update_character(self, character, author):
+        try:
+            self.db[author][character["Nome"]] = character
+            self.save_db()
+        except:
+            pass
+
+    def check_character(self, character):
+        check = ["Nome", "Imagem", "Stats", "Inventario"]
+        for item in check:
+            if item not in character:
+                return False
+        return True
+
     def embed(self, name, author, discord):
         character = self.db[author][name]
+        inventory = "Nenhum item adicionado"
+        stats = ""
+        if character["Inventario"] != []:
+            inventory = ""
+            for item in character["Inventario"]:
+                inventory += "- {}\n".format(item)
+        for key, value in character["Stats"].items():
+            stats += "- {}: {}\n".format(key, value)
         embed = discord.Embed(title=character["Nome"], color=0x00ff00)
         embed.set_image(url=character["Imagem"])
-        for stat in character["Stats"]:
-            embed.add_field(name=stat, value=character["Stats"][stat], inline=True)
+        embed.add_field(name="STATS", value=stats, inline=True)
+        embed.add_field(name="ITENS", value=inventory, inline=True)
         return embed
 
     def dice(self, message):

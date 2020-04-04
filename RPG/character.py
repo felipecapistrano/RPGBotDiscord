@@ -37,12 +37,9 @@ class Character:
         "Inventario": self.inventario
             }
 
-    def change_img(self, img):
+    def change_image(self, img):
         self.imagem = img
-    
-    def change_name(self, name):
-        self.nome = name
-    
+        
     def add_inventory(self, item):
         self.inventario.append(item)
 
@@ -116,7 +113,7 @@ class Character:
     def up_esquiva(self):
         self.esquiva += 1
 
-    def up_esquiva(self):
+    def up_bloqueio(self):
         self.bloqueio += 1
 
     def up_discernimento(self):
