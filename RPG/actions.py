@@ -36,8 +36,9 @@ class Actions:
                 return False
         return True
 
-    def embed(self, name, author, discord):
+    def character_embed(self, name, author, discord):
         character = self.db[author][name]
+        money = "Dinheiro: " + str(character["Dinheiro"])
         inventory = "Nenhum item adicionado"
         stats = ""
         footer = ""
@@ -68,7 +69,7 @@ class Actions:
             for tecnica in character["Tecnicas"]:
                 footer += "{}, ".format(tecnica)
             footer = footer[:-2]
-        embed = discord.Embed(title=character["Nome"], color=0x00ff00)
+        embed = discord.Embed(title=character["Nome"], description=money, color=0x00ff00)
         embed.set_image(url=character["Imagem"])
         embed.add_field(name="STATS", value=stats, inline=True)
         embed.add_field(name="ITENS", value=inventory, inline=True)
@@ -116,3 +117,21 @@ class Actions:
             result = [random.randint(1, dice), random.randint(1, dice)]
             result.sort()
             return result
+
+    def treat_message(self, message):
+        msg = message.content.split(" ")
+        operation = msg[0]
+        msg.remove(msg[0])
+        to_add = " ".join(msg).replace("ç", "c").replace("ã", "a").replace("á", "a").replace("ê", "e")
+        try:
+            to_add = to_add[:1].upper() + to_add[1:]        
+        except:
+            pass
+        if (operation == "$adicionar_dinheiro" or
+            operation == "$adicionar_item" or 
+            operation == "$adicionar_maestrias" or 
+            operation == "$adicionar_elemento" or 
+            operation == "$adicionar_tecnica"):
+            return operation, to_add
+        else:
+            return to_add

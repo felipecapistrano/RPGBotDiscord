@@ -23,6 +23,7 @@ Por favor preencha as informações a seguir sem quebrar a formatação <3
         "Discernimento": 0,
         "Poder": 0
     },
+    "Dinheiro": 0,
     "Inventario": [],
     "Maestrias": [],
     "Elementos": [],
@@ -74,6 +75,12 @@ $upar: melhora um stat do personagem
 
     def incorrect_character(self):
         return "O personagem não foi criado com o formato correto"
+    
+    def inventory_full(self):
+        return "Seu inventário já está cheio"
+
+    def money_insuficient(self):
+        return "Você não possui dinheiro o suficiente"
 
     def not_selected(self):
         return "O personagem não foi selecionado ou não existe"

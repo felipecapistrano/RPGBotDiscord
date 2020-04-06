@@ -8,19 +8,21 @@ messages = Message()
 class Controller:
     def __init__(self):
         self.in_use = {}
-        
+
     def add(self, message):
         try:
-            msg = message.content.split(" ")
-            operation = msg[0]
-            to_add = msg[1]
             author = str(message.author.id)
             if self.check_selected(author) == False:
                 return messages.not_selected()
+            operation, to_add = actions.treat_message(message)
             character = self.get_character(author)
 
-            if operation == "$adicionar_item":
-                character.add_item(to_add)
+            if operation == "$adicionar_dinheiro":
+                character.add_money(int(to_add))
+
+            elif operation == "$adicionar_item":
+                if character.add_item(to_add) != None:
+                    return messages.inventory_full()
 
             elif operation == "$adicionar_maestria":
                 character.add_mastery(to_add)
@@ -42,11 +44,10 @@ class Controller:
 
     def change_image(self, message):
         try:
-            msg = message.content.split(" ")
-            url = msg[1]
             author = str(message.author.id)
             if self.check_selected(author) == False:
                 return messages.not_selected()
+            url = actions.treat_message(message)
 
             character = self.get_character(author)
             character.change_image(url)
@@ -98,12 +99,12 @@ class Controller:
 
         return msg
 
-    def embed(self, message, discord):
+    def character_embed(self, message, discord):
         author = str(message.author.id)
         if self.check_selected(author) == False:
             return messages.not_selected()
         name = self.in_use[author]
-        return actions.embed(name, author, discord)
+        return actions.character_embed(name, author, discord)
 
     def get_character(self, author):
         db = actions.get_db()
@@ -113,13 +114,12 @@ class Controller:
 
     def remove_item(self, message):
         try:
-            msg = message.content.split(" ")
-            item = msg[1]
             author = str(message.author.id)
             if self.check_selected(author) == False:
                 return messages.not_selected()
+            item = actions.treat_message(message)
             character = self.get_character(author)
-            character.remove_inventory(item)
+            character.remove_item(item)
             character = character.export()
             actions.update_character(character, author)
             return messages.alteration_sucess()
@@ -127,11 +127,12 @@ class Controller:
             return messages.alteration_failed()
 
     def roll(self, message):
-        msg = message.content.split(" ")
-        stat = msg[1]
         author = str(message.author.id)
         if self.check_selected(author) == False:
             return messages.not_selected()
+
+        msg = message.content.split(" ")
+        stat = msg[1]
         advantage = msg[2] if len(msg) == 3 else None
         character = self.get_character(author)
         if stat == "força" or stat == "forca":
@@ -195,8 +196,7 @@ class Controller:
             return messages.dice(character.get_name(), result, bonus, advantage)
 
     def select(self, message):
-        msg = message.content.split(" ")
-        name = msg[1]
+        name = actions.treat_message(message)
         db = actions.get_db()
         author = str(message.author.id)
         if name in db[author]:
@@ -205,15 +205,29 @@ class Controller:
         else:
             return messages.select_failed()
 
-    def up_stat(self, message):
+    def subtract_money(self, message):
         try:
-            msg = message.content.split(" ")
-            stat = msg[1]
             author = str(message.author.id)
             if self.check_selected(author) == False:
                 return messages.not_selected()
+            value = actions.treat_message(message)
             character = self.get_character(author)
-            if stat == "força" or stat == "forca":
+            if character.remove_money(int(value)) != None:
+                return messages.money_insuficient()
+            character = character.export()
+            actions.update_character(character, author)
+            return messages.alteration_sucess()
+        except:
+            return messages.alteration_failed()
+
+    def up_stat(self, message):
+        try:
+            author = str(message.author.id)
+            if self.check_selected(author) == False:
+                return messages.not_selected()
+            stat = actions.treat_message(message)
+            character = self.get_character(author)
+            if stat == "forca":
                 character.up_força()
                 
             elif stat == "destreza" :
@@ -228,7 +242,7 @@ class Controller:
             elif stat == "conhecimento":
                 character.up_conhecimento()
 
-            elif stat == "percepção" or stat == "percepçao" or stat == "percepcao" or stat == "percepcão":
+            elif "percepcao":
                 character.up_percepçao()
 
             elif stat == "mira":

@@ -14,6 +14,7 @@ class Character:
         self.bloqueio = character["Stats"]["Bloqueio"]
         self.discernimento = character["Stats"]["Discernimento"]
         self.poder = character["Stats"]["Poder"]
+        self.dinheiro = character["Dinheiro"]
         self.inventario = character["Inventario"]
         self.maestrias = character["Maestrias"]
         self.elementos = character["Elementos"]
@@ -37,6 +38,7 @@ class Character:
             "Discernimento": self.discernimento,
             "Poder": self.poder
         },
+        "Dinheiro": self.dinheiro,
         "Inventario": sorted(self.inventario),
         "Maestrias": sorted(self.maestrias),
         "Elementos": sorted(self.elementos),
@@ -45,9 +47,21 @@ class Character:
 
     def change_image(self, img):
         self.imagem = img
-        
+
+    def add_money(self, value):
+        self.dinheiro += value
+
+    def remove_money(self, value):
+        if self.dinheiro - value >= 0:
+            self.dinheiro -= value
+        else:
+            return False
+            
     def add_item(self, item):
-        self.inventario.append(item)
+        if len(self.inventario) < 12:
+            self.inventario.append(item)
+        else:
+            return False
 
     def remove_item(self, item):
         self.inventario.remove(item)
