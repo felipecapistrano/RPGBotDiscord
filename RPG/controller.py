@@ -135,65 +135,44 @@ class Controller:
         stat = msg[1]
         advantage = msg[2] if len(msg) == 3 else None
         character = self.get_character(author)
-        if stat == "força" or stat == "forca":
+        if stat == "Forca":
             bonus = character.get_força()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "destreza" :
+        elif stat == "Destreza" :
             bonus = character.get_destreza()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "agilidade":
+        elif stat == "Agilidade":
             bonus = character.get_agilidade()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "carisma":
+        elif stat == "Carisma":
             bonus = character.get_carisma()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "conhecimento":
+        elif stat == "Conhecimento":
             bonus = character.get_conhecimento()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "percepção" or stat == "percepçao" or stat == "percepcao" or stat == "percepcão":
+        elif stat == "Percepcao":
             bonus = character.get_percepçao()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "mira":
+        elif stat == "Mira":
             bonus = character.get_mira()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "habilidade":
+        elif stat == "Habilidade":
             bonus = character.get_habilidade()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "esquiva":
+        elif stat == "Esquiva":
             bonus = character.get_esquiva()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "bloqueio":
+        elif stat == "Bloqueio":
             bonus = character.get_bloqueio()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        elif stat == "discernimento":
+        elif stat == "Discernimento":
             bonus = character.get_discernimento()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
 
-        else:
+        elif stat == "Poder":
             bonus = character.get_poder()
-            result = actions.roll_dice(10, advantage)
-            return messages.dice(character.get_name(), result, bonus, advantage)
+
+        result = actions.roll_dice(20, advantage)
+        return messages.dice(character.get_name(), result, bonus, advantage)
 
     def select(self, message):
         name = actions.treat_message(message)
@@ -227,40 +206,40 @@ class Controller:
                 return messages.not_selected()
             stat = actions.treat_message(message)
             character = self.get_character(author)
-            if stat == "forca":
+            if stat == "Forca":
                 character.up_força()
                 
-            elif stat == "destreza" :
+            elif stat == "Destreza" :
                 character.up_destreza()
 
-            elif stat == "agilidade":
+            elif stat == "Agilidade":
                 character.up_agilidade()
 
-            elif stat == "carisma":
+            elif stat == "Carisma":
                 character.up_carisma()
 
-            elif stat == "conhecimento":
+            elif stat == "Conhecimento":
                 character.up_conhecimento()
 
-            elif "percepcao":
+            elif stat =="Percepcao":
                 character.up_percepçao()
 
-            elif stat == "mira":
+            elif stat == "Mira":
                 character.up_mira()
 
-            elif stat == "habilidade":
+            elif stat == "Habilidade":
                 character.up_habilidade()
 
-            elif stat == "esquiva":
+            elif stat == "Esquiva":
                 character.up_esquiva()
 
-            elif stat == "bloqueio":
+            elif stat == "Bloqueio":
                 character.up_bloqueio()
 
-            elif stat == "discernimento":
+            elif stat == "Discernimento":
                 character.up_discernimento()
 
-            else:
+            elif stat == "Poder":
                 character.up_poder()
 
             character = character.export()
